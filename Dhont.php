@@ -30,9 +30,9 @@ class Dhont
     {
         asort($listas);
         $listas = array_reverse($listas, true);
-        $bancas = $this->createBancasDivisores($bancas, $listas);
+        $bancas = $this->_createBancasDivisores($bancas, $listas);
         foreach ($bancas as $key => $b) {
-            $max = $this->getMaxCociente($listas);
+            $max = $this->_getMaxCociente($listas);
             $bancas[$key] = $max['identificador'];
         }
         return $bancas;
@@ -49,7 +49,7 @@ class Dhont
      * @return array con estructura [$bancas, $divisores]. en detalle: <pre>
      *    [false, false, ...], // count = $bancas 
      */
-    private function createBancasDivisores($bancas, $listas)
+    private function _createBancasDivisores($bancas, $listas)
     {
         $bancas = array_fill(0, $bancas, false);
         $this->divisores = array_combine(
@@ -64,12 +64,12 @@ class Dhont
      * cociente, incrementa en 1 el divisor del mayor cociente. Esto reduce las 
      * chances de vovler a elegir el mismo partido/lista la proxima vez.
      * 
-     * @param array $listas    Las listas/partidos que se disputan bancas. Estructura:
+     * @param array $listas Las listas/partidos que se disputan bancas. Estructura:
      * {identificadorLista1 => $votos1, identificadorLista2 => $votos2, ...}
      * 
      * @return array Estructutra {'identificador' => $lista, 'cociente' => $maxCociente}
      */
-    private function getMaxCociente($listas)
+    private function _getMaxCociente($listas)
     {
         $max = array('identificador' => null, 'cociente' => -1);
         foreach ($listas as $identificador => $votos) {
