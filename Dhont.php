@@ -1,7 +1,5 @@
 <?php
 
-namespace DCD\PrimariasBundle\Asignacion;
-
 /**
  * Implementacion del algoritmo Dhont
  *
