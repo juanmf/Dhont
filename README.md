@@ -1,7 +1,7 @@
 Dhont
 =====
 
-Implementacion en PHP del sistema D'HONT para repartir bancas electorales. `PHP implementation of D'HONT elective position distribution`
+Implementacion en PHP del sistema D'HONT para repartir bancas electorales. `PHP implementation of D'HONT elective seats distribution`
 [Spanish Wiki](https://es.wikipedia.org/wiki/Sistema_D'Hondt)
 [English Wiki](http://en.wikipedia.org/wiki/D%27Hondt_method)
 
