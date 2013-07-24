@@ -8,6 +8,14 @@
 class Dhont
 {
     /**
+     * Los divisores de las listas/partidos. Estructura:
+     * {identificadorLista1 => 1, identificadorLista2 => 1, ...}
+     * 
+     * @var array
+     */
+    private $divisores;
+    
+    /**
      * Devuelve un array con cantidad de eltos. = a la cantidad de bancas a repartir
      * en cada elto, el valor es igual al valor correspondiente en array $listas.
      * La metodologia para repartir es el sistema DHONT.
@@ -22,9 +30,9 @@ class Dhont
     {
         asort($listas);
         $listas = array_reverse($listas, true);
-        list($bancas, $divisores) = $this->_createBancasDivisores($bancas, $listas);
+        $bancas = $this->createBancasDivisores($bancas, $listas);
         foreach ($bancas as $key => $b) {
-            $max = $this->_getMaxCociente($listas, $divisores);
+            $max = $this->getMaxCociente($listas);
             $bancas[$key] = $max['identificador'];
         }
         return $bancas;
@@ -39,19 +47,16 @@ class Dhont
      * {identificadorLista1 => $votos1, identificadorLista2 => $votos2, ...}
      * 
      * @return array con estructura [$bancas, $divisores]. en detalle: <pre>
-     * [
      *    [false, false, ...], // count = $bancas 
-     *    {identificadorLista1 => 1, identificadorLista2 => 1, ...}
-     * ]
      */
-    private function _createBancasDivisores($bancas, $listas)
+    private function createBancasDivisores($bancas, $listas)
     {
         $bancas = array_fill(0, $bancas, false);
-        $divisores = array_combine(
+        $this->divisores = array_combine(
             array_keys($listas), 
             array_fill(0, count($listas), 1)
         );
-        return array($bancas, $divisores);
+        return $bancas;
     }
 
     /**
@@ -59,25 +64,23 @@ class Dhont
      * cociente, incrementa en 1 el divisor del mayor cociente. Esto reduce las 
      * chances de vovler a elegir el mismo partido/lista la proxima vez.
      * 
-     * @param array $listas     Las listas/partidos que se disputan bancas. Estructura:
+     * @param array $listas    Las listas/partidos que se disputan bancas. Estructura:
      * {identificadorLista1 => $votos1, identificadorLista2 => $votos2, ...}
-     * @param array &$divisores Los divisores para los votos de todos los partidos/listas
-     * compitiendo. {@link self::createBancasDivisores()}
      * 
      * @return array Estructutra {'identificador' => $lista, 'cociente' => $maxCociente}
      */
-    private function _getMaxCociente($listas, &$divisores)
+    private function getMaxCociente($listas)
     {
         $max = array('identificador' => null, 'cociente' => -1);
         foreach ($listas as $identificador => $votos) {
-            $cociente = $votos / $divisores[$identificador];
+            $cociente = $votos / $this->divisores[$identificador];
             if ($max['cociente'] < $cociente) {
                 // si algun max cociente empata con otro, prevalece el de la lista 
                 // con mas votos. Si tambien empatan en votos (chocan con divisor 1), se jode la 2da.
                 $max = array('identificador' => $identificador, 'cociente' => $cociente);
             }
         }
-        $divisores[$max['identificador']]++;
+        $this->divisores[$max['identificador']]++;
         return $max;
     }
 }
